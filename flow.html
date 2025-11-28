@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Execution Flow (Horizontal)</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#e8f0fe',
+                primaryTextColor: '#000',
+                primaryBorderColor: '#4285f4',
+                lineColor: '#5f6368',
+                secondaryColor: '#fce8e6',
+                tertiaryColor: '#fff'
+            },
+            flowchart: { curve: 'linear' }
+        });
+    </script>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; background: #fff; }
+        /* Update for horizontal scrolling if needed */
+        .mermaid { width: 100%; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h2>Python Script Execution Flow (Horizontal)</h2>
+    <div class="mermaid">
+    graph LR
+        subgraph GlobalScope ["1. Global Setup"]
+            Imports["Import Libraries"]
+            Config["Configure API"]
+            DefHelpers["Define Helper Funcs"]
+            DefMainFunc["Define Logic Func"]
+            
+            Imports --> Config --> DefHelpers --> DefMainFunc
+        end
+
+        subgraph SidebarLogic ["2. Sidebar"]
+            CallHelpers["Call get_available_models"]
+            RenderSidebar["Render UI"]
+            InitModel["Init Model"]
+            
+            DefMainFunc --> CallHelpers
+            CallHelpers --> RenderSidebar
+            RenderSidebar --> InitModel
+        end
+
+        subgraph MainUI ["3. Main App"]
+            PageConfig["Page Config"]
+            RenderTitle["Render Title"]
+            InitState["Init Session State"]
+            RenderInput["Render Input"]
+            
+            InitModel --> PageConfig
+            PageConfig --> RenderTitle
+            RenderTitle --> InitState
+            InitState --> RenderInput
+        end
+
+        subgraph Interaction ["4. Event Loop"]
+            BtnClick{"Button Clicked?"}
+            RenderInput --> BtnClick
+            
+            subgraph Action ["Action Block"]
+                Spinner["Show Spinner"]
+                RunGen["Call Generate"]
+                UpdateState["Update Session"]
+            end
+
+            BtnClick -- Yes --> Spinner
+            Spinner --> RunGen --> UpdateState
+        end
+
+        subgraph Rendering ["5. Output"]
+            CheckState{"Session Has Data?"}
+            DisplayScript["Display Script"]
+            Download["Download Button"]
+
+            BtnClick -- No --> CheckState
+            UpdateState --> CheckState
+            CheckState -- Yes --> DisplayScript --> Download
+            CheckState -- No --> End([End])
+            Download --> End
+        end
+
+        style Imports fill:#d2e3fc,stroke:#4285f4
+        style Config fill:#d2e3fc,stroke:#4285f4
+        style DefHelpers fill:#e8f0fe,stroke:#4285f4,stroke-dasharray: 5 5
+        style DefMainFunc fill:#e8f0fe,stroke:#4285f4,stroke-dasharray: 5 5
+        
+        style Action fill:#fce8e6,stroke:#ea4335
+        style Rendering fill:#e6f4ea,stroke:#34a853
+    </div>
+</body>
+</html>
